@@ -27,6 +27,22 @@ const LogoControls: React.FC<LogoControlsProps> = ({ design, onUpdateNested }) =
         </div>
 
         <div className="control-group">
+          <label className="control-label">
+            <input
+              type="checkbox"
+              className="checkbox"
+              checked={design.header.includeLogo}
+              onChange={(e) => onUpdateNested('header.includeLogo', e.target.checked)}
+              disabled={!logo.enabled}
+            />
+            {' Include logo in header'}
+          </label>
+          {logo.enabled && design.header.includeLogo && !design.header.enabled && (
+            <span style={{ fontSize: '11px', color: '#9ca3af' }}>Enable the header to show the logo there.</span>
+          )}
+        </div>
+
+        <div className="control-group">
           <label className="control-label">Image URL</label>
           <input
             type="text"
@@ -70,7 +86,7 @@ const LogoControls: React.FC<LogoControlsProps> = ({ design, onUpdateNested }) =
             value={logo.x}
             onChange={(e) => onUpdateNested('logo.x', parseFloat(e.target.value))}
             step="0.1"
-            disabled={!logo.enabled}
+            disabled={!logo.enabled || design.header.includeLogo}
           />
         </div>
 
@@ -82,7 +98,7 @@ const LogoControls: React.FC<LogoControlsProps> = ({ design, onUpdateNested }) =
             value={logo.y}
             onChange={(e) => onUpdateNested('logo.y', parseFloat(e.target.value))}
             step="0.1"
-            disabled={!logo.enabled}
+            disabled={!logo.enabled || design.header.includeLogo}
           />
         </div>
 

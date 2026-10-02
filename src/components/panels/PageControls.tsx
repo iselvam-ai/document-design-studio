@@ -1,5 +1,6 @@
 import React from 'react';
-import type { DesignConfig, PageSize } from '../../types';
+import type { DesignConfig, Orientation, PageSize } from '../../types';
+import { PAGE_SIZES } from '../../utils';
 
 interface PageControlsProps {
   design: DesignConfig;
@@ -13,6 +14,23 @@ const PageControls: React.FC<PageControlsProps> = ({ design, onUpdateNested }) =
   const currentSize = design.page.size;
   const currentOrientation = design.page.orientation;
 
+  // Size and orientation drive the page dimensions, so update them together as one undo step.
+  const applySize = (size: PageSize, orientation: Orientation) => {
+    const dims = PAGE_SIZES[size];
+    if (!dims) {
+      onUpdateNested('page', { ...design.page, size, orientation });
+      return;
+    }
+    const landscape = orientation === 'Landscape';
+    onUpdateNested('page', {
+      ...design.page,
+      size,
+      orientation,
+      width: landscape ? dims.height : dims.width,
+      height: landscape ? dims.width : dims.height,
+    });
+  };
+
   return (
     <>
       <div className="panel-section">
@@ -23,7 +41,7 @@ const PageControls: React.FC<PageControlsProps> = ({ design, onUpdateNested }) =
           <select
             className="control-select"
             value={currentSize}
-            onChange={(e) => onUpdateNested('page.size', e.target.value as PageSize)}
+            onChange={(e) => applySize(e.target.value as PageSize, currentOrientation)}
           >
             {PAGE_SIZE_OPTIONS.map((size) => (
               <option key={size} value={size}>
@@ -38,7 +56,7 @@ const PageControls: React.FC<PageControlsProps> = ({ design, onUpdateNested }) =
           <select
             className="control-select"
             value={currentOrientation}
-            onChange={(e) => onUpdateNested('page.orientation', e.target.value as 'Portrait' | 'Landscape')}
+            onChange={(e) => applySize(currentSize, e.target.value as Orientation)}
           >
             {ORIENTATION_OPTIONS.map((orientation) => (
               <option key={orientation} value={orientation}>

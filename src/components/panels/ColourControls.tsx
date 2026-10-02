@@ -37,11 +37,15 @@ const ColourControls: React.FC<ColourControlsProps> = ({ design, onUpdateNested 
         {renderColorControl('primary', 'Primary', 'colors.primary')}
         {renderColorControl('secondary', 'Secondary', 'colors.secondary')}
         {renderColorControl('accent', 'Accent', 'colors.accent')}
+        {renderColorControl('heading', 'Heading', 'colors.heading')}
+        {renderColorControl('body', 'Body Text', 'colors.body')}
+        {renderColorControl('muted', 'Muted Text', 'colors.muted')}
         {renderColorControl('background', 'Page Background', 'colors.background')}
-        {renderColorControl('text', 'Text', 'colors.text')}
-        {renderColorControl('lightText', 'Light Text', 'colors.lightText')}
+        {renderColorControl('tableHeader', 'Table Header', 'colors.tableHeader')}
+        {renderColorControl('tableBody', 'Table Body', 'colors.tableBody')}
         {renderColorControl('border', 'Border', 'colors.border')}
-        {renderColorControl('headerFooterBg', 'Header/Footer Background', 'colors.headerFooterBg')}
+        {renderColorControl('footer', 'Footer', 'colors.footer')}
+        {renderColorControl('highlight', 'Highlight', 'colors.highlight')}
       </div>
     </>
   );

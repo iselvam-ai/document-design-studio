@@ -141,6 +141,23 @@
   z-index: 1;
 }
 
+.page-logo {
+  position: absolute;
+  z-index: 3;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-logo {
+  object-fit: contain;
+}
+
 .page-inner {
   position: relative;
   z-index: 2;
@@ -185,39 +202,62 @@
   overflow-wrap: break-word;
 }
 
-.page-text.title {
-  font-weight: 700;
+/* Document text styles. Font, size, colour, spacing and alignment come from the
+   design's typography settings (applied inline by Canvas); these classes give each
+   style its structural role. */
+.page-text {
+  margin: 0;
 }
 
-.page-text.subtitle {
-  font-style: italic;
+.doc-document-title,
+.doc-part-title,
+.doc-article-title,
+.doc-section-title {
+  break-after: avoid;
 }
 
-.page-text.section-title {
+.doc-section-title {
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+}
+
+.doc-subtitle,
+.doc-lead-paragraph,
+.doc-body {
+  hyphens: auto;
+}
+
+.doc-caption {
+  break-before: avoid;
+}
+
+.doc-header,
+.doc-footer {
+  white-space: nowrap;
+}
+
+.page-slots {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
 }
 
 .sample-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 9px;
+  margin: 12px 0 4px;
 }
 
-.sample-table th {
-  padding: 6px;
-  text-align: left;
-  font-weight: bold;
-  color: white;
+.doc-table-header {
+  vertical-align: bottom;
 }
 
-.sample-table td {
-  padding: 6px;
-  border-bottom: 1px solid;
+.doc-table-body {
+  vertical-align: top;
 }
 
-.sample-table tr:nth-child(even) {
-  background: rgba(0, 0, 0, 0.02);
+.sample-table tr.striped {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04));
 }
 
 /* Right Panel */
@@ -312,6 +352,36 @@
   font-size: 12px;
   font-family: 'Courier New', monospace;
   box-sizing: border-box;
+}
+
+.palette-swatches {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+
+.palette-swatch {
+  height: 22px;
+  border: 1px solid #d1d5db;
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.palette-swatch.selected {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+}
+
+.palette-swatch:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.palette-selection {
+  font-size: 11px;
+  color: #6b7280;
+  margin: 4px 0;
 }
 
 .checkbox {

@@ -1,6 +1,7 @@
 import React from 'react';
 import type { DesignConfig } from '../../types';
 import { FONT_FAMILIES } from '../../utils';
+import PaletteColorField from './PaletteColorField';
 
 interface HeaderControlsProps {
   design: DesignConfig;
@@ -68,8 +69,8 @@ const HeaderControls: React.FC<HeaderControlsProps> = ({ design, onUpdateNested 
           <label className="control-label">Font Family</label>
           <select
             className="control-select"
-            value={header.fontFamily}
-            onChange={(e) => onUpdateNested('header.fontFamily', e.target.value)}
+            value={design.typography.header.fontFamily}
+            onChange={(e) => onUpdateNested('typography.header.fontFamily', e.target.value)}
             disabled={!header.enabled}
           >
             {FONT_FAMILIES.map((font) => (
@@ -85,32 +86,20 @@ const HeaderControls: React.FC<HeaderControlsProps> = ({ design, onUpdateNested 
           <input
             type="number"
             className="control-input"
-            value={header.fontSize}
-            onChange={(e) => onUpdateNested('header.fontSize', parseFloat(e.target.value))}
+            value={design.typography.header.fontSize}
+            onChange={(e) => onUpdateNested('typography.header.fontSize', parseFloat(e.target.value))}
             step="0.5"
             disabled={!header.enabled}
           />
         </div>
 
-        <div className="control-group">
-          <label className="control-label">Color</label>
-          <div className="color-picker-row">
-            <input
-              type="color"
-              className="color-picker-input"
-              value={header.color}
-              onChange={(e) => onUpdateNested('header.color', e.target.value)}
-              disabled={!header.enabled}
-            />
-            <input
-              type="text"
-              className="color-hex-input"
-              value={header.color}
-              onChange={(e) => onUpdateNested('header.color', e.target.value)}
-              disabled={!header.enabled}
-            />
-          </div>
-        </div>
+        <PaletteColorField
+          label="Color"
+          value={design.typography.header.color}
+          palette={design.colors}
+          onChange={(color) => onUpdateNested('typography.header.color', color)}
+          disabled={!header.enabled}
+        />
 
         <div className="control-group">
           <label className="control-label">Spacing (px)</label>
@@ -152,25 +141,14 @@ const HeaderControls: React.FC<HeaderControlsProps> = ({ design, onUpdateNested 
           />
         </div>
 
-        <div className="control-group">
-          <label className="control-label">Border Color</label>
-          <div className="color-picker-row">
-            <input
-              type="color"
-              className="color-picker-input"
-              value={header.borderColor}
-              onChange={(e) => onUpdateNested('header.borderColor', e.target.value)}
-              disabled={!header.enabled || !header.borderEnabled}
-            />
-            <input
-              type="text"
-              className="color-hex-input"
-              value={header.borderColor}
-              onChange={(e) => onUpdateNested('header.borderColor', e.target.value)}
-              disabled={!header.enabled || !header.borderEnabled}
-            />
-          </div>
-        </div>
+        <PaletteColorField
+          label="Border Color"
+          value={header.borderColor}
+          palette={design.colors}
+          onChange={(color) => onUpdateNested('header.borderColor', color)}
+          disabled={!header.enabled || !header.borderEnabled}
+          allowCustom
+        />
       </div>
     </>
   );

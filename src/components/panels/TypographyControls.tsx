@@ -1,23 +1,59 @@
-import React from 'react';
-import type { DesignConfig } from '../../types';
+import React, { useState } from 'react';
+import type { DesignConfig, TypographyConfig } from '../../types';
 import { FONT_FAMILIES } from '../../utils';
+import PaletteColorField from './PaletteColorField';
 
 interface TypographyControlsProps {
   design: DesignConfig;
   onUpdateNested: (path: string, value: any) => void;
 }
 
-type TypographyKey = 'documentTitle' | 'subtitle' | 'sectionTitle' | 'body';
+type TypographyKey = keyof TypographyConfig;
 
-const ALIGNMENT_OPTIONS = ['Left', 'Center', 'Right'];
+// Where each style appears in the document; spacing/alignment only apply to some of them.
+const STYLE_GROUPS: Array<{ group: string; styles: Array<{ key: TypographyKey; label: string }> }> = [
+  {
+    group: 'Headings',
+    styles: [
+      { key: 'documentTitle', label: 'Document Title' },
+      { key: 'subtitle', label: 'Subtitle' },
+      { key: 'partTitle', label: 'Part Title (Heading 1)' },
+      { key: 'articleTitle', label: 'Article Title (Heading 2)' },
+      { key: 'sectionTitle', label: 'Section Title (Heading 3)' },
+    ],
+  },
+  {
+    group: 'Text',
+    styles: [
+      { key: 'leadParagraph', label: 'Lead Paragraph' },
+      { key: 'body', label: 'Body Text' },
+      { key: 'caption', label: 'Caption' },
+    ],
+  },
+  {
+    group: 'Table',
+    styles: [
+      { key: 'tableHeader', label: 'Table Header' },
+      { key: 'tableBody', label: 'Table Body' },
+    ],
+  },
+  {
+    group: 'Page',
+    styles: [
+      { key: 'header', label: 'Page Header' },
+      { key: 'footer', label: 'Page Footer' },
+    ],
+  },
+];
+
+const ALL_STYLES = STYLE_GROUPS.flatMap((g) => g.styles);
+const NO_SPACING: TypographyKey[] = ['tableHeader', 'tableBody', 'header', 'footer'];
+const NO_ALIGNMENT: TypographyKey[] = ['header', 'footer'];
+
+const ALIGNMENT_OPTIONS = ['Left', 'Center', 'Right', 'Justify'];
 
 const TypographyControls: React.FC<TypographyControlsProps> = ({ design, onUpdateNested }) => {
-  const typographies: Array<{ key: TypographyKey; label: string }> = [
-    { key: 'documentTitle', label: 'Document Title' },
-    { key: 'subtitle', label: 'Subtitle' },
-    { key: 'sectionTitle', label: 'Section Title' },
-    { key: 'body', label: 'Body Text' },
-  ];
+  const [selectedStyle, setSelectedStyle] = useState<TypographyKey>('documentTitle');
 
   const renderTypographyPanel = (key: TypographyKey, label: string) => {
     const typo = design.typography[key];
@@ -78,23 +114,12 @@ const TypographyControls: React.FC<TypographyControlsProps> = ({ design, onUpdat
           </label>
         </div>
 
-        <div className="control-group">
-          <label className="control-label">Color</label>
-          <div className="color-picker-row">
-            <input
-              type="color"
-              className="color-picker-input"
-              value={typo.color}
-              onChange={(e) => onUpdateNested(`${basePath}.color`, e.target.value)}
-            />
-            <input
-              type="text"
-              className="color-hex-input"
-              value={typo.color}
-              onChange={(e) => onUpdateNested(`${basePath}.color`, e.target.value)}
-            />
-          </div>
-        </div>
+        <PaletteColorField
+          label="Color"
+          value={typo.color}
+          palette={design.colors}
+          onChange={(color) => onUpdateNested(`${basePath}.color`, color)}
+        />
 
         <div className="control-group">
           <label className="control-label">Line Height</label>
@@ -119,51 +144,80 @@ const TypographyControls: React.FC<TypographyControlsProps> = ({ design, onUpdat
           />
         </div>
 
-        <div className="control-group">
-          <label className="control-label">Alignment</label>
-          <select
-            className="control-select"
-            value={typo.alignment}
-            onChange={(e) => onUpdateNested(`${basePath}.alignment`, e.target.value as 'Left' | 'Center' | 'Right')}
-          >
-            {ALIGNMENT_OPTIONS.map((align) => (
-              <option key={align} value={align}>
-                {align}
-              </option>
-            ))}
-          </select>
-        </div>
+        {!NO_ALIGNMENT.includes(key) && (
+          <div className="control-group">
+            <label className="control-label">Alignment</label>
+            <select
+              className="control-select"
+              value={typo.alignment}
+              onChange={(e) => onUpdateNested(`${basePath}.alignment`, e.target.value)}
+            >
+              {ALIGNMENT_OPTIONS.map((align) => (
+                <option key={align} value={align}>
+                  {align}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
-        <div className="control-group">
-          <label className="control-label">Paragraph Spacing Before (px)</label>
-          <input
-            type="number"
-            className="control-input"
-            value={typo.paragraphSpacingBefore}
-            onChange={(e) => onUpdateNested(`${basePath}.paragraphSpacingBefore`, parseFloat(e.target.value))}
-            step="1"
-            min="0"
-          />
-        </div>
+        {!NO_SPACING.includes(key) && (
+          <>
+            <div className="control-group">
+              <label className="control-label">Paragraph Spacing Before (px)</label>
+              <input
+                type="number"
+                className="control-input"
+                value={typo.paragraphSpacingBefore}
+                onChange={(e) => onUpdateNested(`${basePath}.paragraphSpacingBefore`, parseFloat(e.target.value))}
+                step="1"
+                min="0"
+              />
+            </div>
 
-        <div className="control-group">
-          <label className="control-label">Paragraph Spacing After (px)</label>
-          <input
-            type="number"
-            className="control-input"
-            value={typo.paragraphSpacingAfter}
-            onChange={(e) => onUpdateNested(`${basePath}.paragraphSpacingAfter`, parseFloat(e.target.value))}
-            step="1"
-            min="0"
-          />
-        </div>
+            <div className="control-group">
+              <label className="control-label">Paragraph Spacing After (px)</label>
+              <input
+                type="number"
+                className="control-input"
+                value={typo.paragraphSpacingAfter}
+                onChange={(e) => onUpdateNested(`${basePath}.paragraphSpacingAfter`, parseFloat(e.target.value))}
+                step="1"
+                min="0"
+              />
+            </div>
+          </>
+        )}
       </div>
     );
   };
 
+  const selected = ALL_STYLES.find((style) => style.key === selectedStyle) ?? ALL_STYLES[0];
+
   return (
     <>
-      {typographies.map(({ key, label }) => renderTypographyPanel(key, label))}
+      <div className="panel-section">
+        <div className="panel-title">Text Styles</div>
+        <div className="control-group">
+          <label className="control-label">Style</label>
+          <select
+            className="control-select"
+            value={selected.key}
+            onChange={(e) => setSelectedStyle(e.target.value as TypographyKey)}
+          >
+            {STYLE_GROUPS.map((group) => (
+              <optgroup key={group.group} label={group.group}>
+                {group.styles.map((style) => (
+                  <option key={style.key} value={style.key}>
+                    {style.label}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+        </div>
+      </div>
+      {renderTypographyPanel(selected.key, selected.label)}
     </>
   );
 };

@@ -108,9 +108,6 @@ export interface HeaderConfig {
   leftContent: string;
   centerContent: string;
   rightContent: string;
-  fontFamily: string;
-  fontSize: number;
-  color: string;
   spacing: number;
   borderEnabled: boolean;
   borderThickness: number;
@@ -123,9 +120,6 @@ export interface FooterConfig {
   leftContent: string;
   centerContent: string;
   rightContent: string;
-  fontFamily: string;
-  fontSize: number;
-  color: string;
   spacing: number;
   borderEnabled: boolean;
   borderThickness: number;
@@ -144,14 +138,10 @@ export interface PageNumberConfig {
 
 export interface TableConfig {
   headerBackground: string;
-  headerTextColor: string;
   bodyBackground: string;
-  bodyTextColor: string;
   borderColor: string;
   borderThickness: number;
   cellPadding: number;
-  fontFamily: string;
-  fontSize: number;
   rowSpacing: number;
   stripedRows: boolean;
 }

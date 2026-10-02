@@ -1,5 +1,6 @@
 import React from 'react';
 import type { DesignConfig } from '../../types';
+import PaletteColorField from './PaletteColorField';
 
 interface TableControlsProps {
   design: DesignConfig;
@@ -14,81 +15,37 @@ const TableControls: React.FC<TableControlsProps> = ({ design, onUpdateNested })
       <div className="panel-section">
         <div className="panel-title">Table Header</div>
 
-        <div className="control-group">
-          <label className="control-label">Background Color</label>
-          <div className="color-picker-row">
-            <input
-              type="color"
-              className="color-picker-input"
-              value={table.headerBackground}
-              onChange={(e) => onUpdateNested('table.headerBackground', e.target.value)}
-            />
-            <input
-              type="text"
-              className="color-hex-input"
-              value={table.headerBackground}
-              onChange={(e) => onUpdateNested('table.headerBackground', e.target.value)}
-            />
-          </div>
-        </div>
+        <PaletteColorField
+          label="Background Color"
+          value={table.headerBackground}
+          palette={design.colors}
+          onChange={(color) => onUpdateNested('table.headerBackground', color)}
+        />
 
-        <div className="control-group">
-          <label className="control-label">Text Color</label>
-          <div className="color-picker-row">
-            <input
-              type="color"
-              className="color-picker-input"
-              value={table.headerTextColor}
-              onChange={(e) => onUpdateNested('table.headerTextColor', e.target.value)}
-            />
-            <input
-              type="text"
-              className="color-hex-input"
-              value={table.headerTextColor}
-              onChange={(e) => onUpdateNested('table.headerTextColor', e.target.value)}
-            />
-          </div>
-        </div>
+        <PaletteColorField
+          label="Text Color"
+          value={design.typography.tableHeader.color}
+          palette={design.colors}
+          onChange={(color) => onUpdateNested('typography.tableHeader.color', color)}
+        />
       </div>
 
       <div className="panel-section">
         <div className="panel-title">Table Body</div>
 
-        <div className="control-group">
-          <label className="control-label">Background Color</label>
-          <div className="color-picker-row">
-            <input
-              type="color"
-              className="color-picker-input"
-              value={table.bodyBackground}
-              onChange={(e) => onUpdateNested('table.bodyBackground', e.target.value)}
-            />
-            <input
-              type="text"
-              className="color-hex-input"
-              value={table.bodyBackground}
-              onChange={(e) => onUpdateNested('table.bodyBackground', e.target.value)}
-            />
-          </div>
-        </div>
+        <PaletteColorField
+          label="Background Color"
+          value={table.bodyBackground}
+          palette={design.colors}
+          onChange={(color) => onUpdateNested('table.bodyBackground', color)}
+        />
 
-        <div className="control-group">
-          <label className="control-label">Text Color</label>
-          <div className="color-picker-row">
-            <input
-              type="color"
-              className="color-picker-input"
-              value={table.bodyTextColor}
-              onChange={(e) => onUpdateNested('table.bodyTextColor', e.target.value)}
-            />
-            <input
-              type="text"
-              className="color-hex-input"
-              value={table.bodyTextColor}
-              onChange={(e) => onUpdateNested('table.bodyTextColor', e.target.value)}
-            />
-          </div>
-        </div>
+        <PaletteColorField
+          label="Text Color"
+          value={design.typography.tableBody.color}
+          palette={design.colors}
+          onChange={(color) => onUpdateNested('typography.tableBody.color', color)}
+        />
 
         <div className="control-group">
           <label className="control-label">
@@ -117,23 +74,12 @@ const TableControls: React.FC<TableControlsProps> = ({ design, onUpdateNested })
           />
         </div>
 
-        <div className="control-group">
-          <label className="control-label">Border Color</label>
-          <div className="color-picker-row">
-            <input
-              type="color"
-              className="color-picker-input"
-              value={table.borderColor}
-              onChange={(e) => onUpdateNested('table.borderColor', e.target.value)}
-            />
-            <input
-              type="text"
-              className="color-hex-input"
-              value={table.borderColor}
-              onChange={(e) => onUpdateNested('table.borderColor', e.target.value)}
-            />
-          </div>
-        </div>
+        <PaletteColorField
+          label="Border Color"
+          value={table.borderColor}
+          palette={design.colors}
+          onChange={(color) => onUpdateNested('table.borderColor', color)}
+        />
       </div>
 
       <div className="panel-section">

@@ -1,5 +1,6 @@
 import React from 'react';
 import type { DesignConfig, BackgroundType } from '../../types';
+import PaletteColorField from './PaletteColorField';
 
 interface BackgroundControlsProps {
   design: DesignConfig;
@@ -32,62 +33,32 @@ const BackgroundControls: React.FC<BackgroundControlsProps> = ({ design, onUpdat
         </div>
 
         {bg.type === 'Solid' && (
-          <div className="control-group">
-            <label className="control-label">Color</label>
-            <div className="color-picker-row">
-              <input
-                type="color"
-                className="color-picker-input"
-                value={bg.solidColor}
-                onChange={(e) => onUpdateNested('background.solidColor', e.target.value)}
-              />
-              <input
-                type="text"
-                className="color-hex-input"
-                value={bg.solidColor}
-                onChange={(e) => onUpdateNested('background.solidColor', e.target.value)}
-              />
-            </div>
-          </div>
+          <PaletteColorField
+            label="Color"
+            value={bg.solidColor}
+            palette={design.colors}
+            onChange={(color) => onUpdateNested('background.solidColor', color)}
+            allowCustom
+          />
         )}
 
         {bg.type === 'Gradient' && (
           <>
-            <div className="control-group">
-              <label className="control-label">Color 1</label>
-              <div className="color-picker-row">
-                <input
-                  type="color"
-                  className="color-picker-input"
-                  value={bg.gradientColor1}
-                  onChange={(e) => onUpdateNested('background.gradientColor1', e.target.value)}
-                />
-                <input
-                  type="text"
-                  className="color-hex-input"
-                  value={bg.gradientColor1}
-                  onChange={(e) => onUpdateNested('background.gradientColor1', e.target.value)}
-                />
-              </div>
-            </div>
+            <PaletteColorField
+              label="Color 1"
+              value={bg.gradientColor1}
+              palette={design.colors}
+              onChange={(color) => onUpdateNested('background.gradientColor1', color)}
+              allowCustom
+            />
 
-            <div className="control-group">
-              <label className="control-label">Color 2</label>
-              <div className="color-picker-row">
-                <input
-                  type="color"
-                  className="color-picker-input"
-                  value={bg.gradientColor2}
-                  onChange={(e) => onUpdateNested('background.gradientColor2', e.target.value)}
-                />
-                <input
-                  type="text"
-                  className="color-hex-input"
-                  value={bg.gradientColor2}
-                  onChange={(e) => onUpdateNested('background.gradientColor2', e.target.value)}
-                />
-              </div>
-            </div>
+            <PaletteColorField
+              label="Color 2"
+              value={bg.gradientColor2}
+              palette={design.colors}
+              onChange={(color) => onUpdateNested('background.gradientColor2', color)}
+              allowCustom
+            />
 
             <div className="control-group">
               <label className="control-label">Direction (degrees)</label>
@@ -182,7 +153,8 @@ const BackgroundControls: React.FC<BackgroundControlsProps> = ({ design, onUpdat
 
         {bg.type === 'Shapes' && (
           <div style={{ fontSize: '12px', color: '#9ca3af', padding: '8px' }}>
-            Decorative shapes are managed through the background configuration. Each shape has position, size, rotation, color, and opacity properties.
+            Decorative shapes are managed through the background configuration. Each shape has position, size, rotation,
+            color, and opacity properties.
           </div>
         )}
       </div>
